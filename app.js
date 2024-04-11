@@ -104,11 +104,11 @@ app.delete("/notes/:id", (req, res, next) => {
 //post request
 app.post("/users", (req, res) =>{
     try {
-        const{ name, company, job, title}= req.body;
-        sql ="INSERT INTO users( name, company, job, title ) VALUES (?,?,?,?)";
-        db.run(sql, [ name, company, job, title], (err)=> {
+        const{ name, company, job, title,pose}= req.body;
+        sql ="INSERT INTO users( name, company, job, title,pose ) VALUES (?,?,?,?)";
+        db.run(sql, [ name, company, job, title,pose], (err)=> {
             if (err) return res.json({ status:300, success:false, error:err});
-            console.log("seccessful input", name, company, job, title);
+            console.log("seccessful input", name, company, job, title,pose);
         });
         return res.json({
             status: 200,
