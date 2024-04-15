@@ -136,6 +136,18 @@ app.get("/users/:id", (req, res, next) => {
       });
 });
 
+//get by name request
+app.get("/users/byname/:name", (req, res, next) => {
+    var params = [req.params.name]
+    db.get(`SELECT * FROM users where name = ?`, [req.params.name], (err, row) => {
+        if (err) {
+          res.status(400).json({"error":err.message});
+          return;
+        }
+        res.status(200).json(row);
+      });
+});
+
 //get request
 app.get("/users", (req, res)=>{
     sql=`SELECT * FROM users`;
@@ -216,6 +228,29 @@ app.get("/projects/:id", (req, res, next) => {
       });
 });
 
+//get request
+app.get("/projects/byname/:name", (req, res)=>{
+    var params = [req.params.name]
+    sql=`SELECT * FROM projects where name = ?`;
+    try{
+        db.all(sql, [req.params.name], (err, rows)=>{
+            if (err) return res.json({ status:300, success:false, error:err});
+
+            if(rows.length<1)
+                return res.json({ status:300, success:false, error:"No match"});
+
+            return res.json({status: 200, data: rows, success: true});
+
+
+        });
+        
+    }catch (error) {
+        return res.json({
+            status: 400,
+            success: false,
+        });
+    }
+})
 //get request
 app.get("/projects", (req, res)=>{
     sql=`SELECT * FROM projects`;
