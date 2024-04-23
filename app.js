@@ -57,6 +57,30 @@ app.get("/notes/:id", (req, res, next) => {
       });
 });
 
+
+//get request
+app.get("/notes/byproject/:project_id", (req, res)=>{
+    sql=`SELECT * FROM notes where project_id = ?`;
+    try{
+        db.all(sql, [req.params.project_id], (err, rows)=>{
+            if (err) return res.json({ status:300, success:false, error:err});
+
+            if(rows.length<1)
+                return res.json({ status:300, success:false, error:"No match"});
+
+            return res.json({status: 200, data: rows, success: true});
+
+
+        });
+        
+    }catch (error) {
+        return res.json({
+            status: 400,
+            success: false,
+        });
+    }
+})
+
 //get request
 app.get("/notes", (req, res)=>{
     sql=`SELECT * FROM notes`;
